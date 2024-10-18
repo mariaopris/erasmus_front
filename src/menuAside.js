@@ -9,15 +9,34 @@ import {
   mdiViewList,
   mdiTelevisionGuide,
   mdiResponsive,
-  mdiPalette,
-  mdiReact
+  mdiSchool, mdiAccountSchool, mdiTicket, mdiFileDocument
 } from '@mdi/js'
 
 export default [
   {
-    to: '/dashboard',
+    to: '/',
     icon: mdiMonitor,
     label: 'Dashboard'
+  },
+  {
+    to: '/universities',
+    icon: mdiSchool,
+    label: 'Universities'
+  },
+  {
+    to: '/students',
+    icon: mdiAccountSchool,
+    label: 'Students'
+  },
+  {
+    to: '/applications',
+    icon: mdiFileDocument,
+    label: 'Applications'
+  },
+  {
+    to: '/tickets',
+    icon: mdiTicket,
+    label: 'Tickets'
   },
   {
     to: '/tables',
@@ -34,16 +53,11 @@ export default [
     label: 'UI',
     icon: mdiTelevisionGuide
   },
-  {
-    to: '/responsive',
-    label: 'Responsive',
-    icon: mdiResponsive
-  },
-  {
-    to: '/',
-    label: 'Styles',
-    icon: mdiPalette
-  },
+  // {
+  //   to: '/',
+  //   label: 'Styles',
+  //   icon: mdiPalette
+  // },
   {
     to: '/profile',
     label: 'Profile',
@@ -71,16 +85,16 @@ export default [
       }
     ]
   },
-  {
-    href: 'https://github.com/justboil/admin-one-vue-tailwind',
-    label: 'GitHub',
-    icon: mdiGithub,
-    target: '_blank'
-  },
-  {
-    href: 'https://github.com/justboil/admin-one-react-tailwind',
-    label: 'React version',
-    icon: mdiReact,
-    target: '_blank'
-  }
+  // {
+  //   href: 'https://github.com/justboil/admin-one-vue-tailwind',
+  //   label: 'GitHub',
+  //   icon: mdiGithub,
+  //   target: '_blank'
+  // },
+  // {
+  //   href: 'https://github.com/justboil/admin-one-react-tailwind',
+  //   label: 'React version',
+  //   icon: mdiReact,
+  //   target: '_blank'
+  // }
 ]

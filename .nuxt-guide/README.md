@@ -90,7 +90,7 @@ module.exports = {
 
 useHead({
   titleTemplate: (titleChunk) => {
-    const titleBase = 'Admin One Vue 3 Tailwind'
+    const titleBase = 'Erasmus One'
 
     return titleChunk ? `${titleChunk} - ${titleBase}` : titleBase
   }

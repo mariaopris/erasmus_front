@@ -18,6 +18,7 @@ const handleStyleChange = (slug) => {
   document.documentElement.classList.forEach((token) => {
     if (token.indexOf('style') === 0) {
       document.documentElement.classList.replace(token, `style-${slug}`)
+      // document.documentElement.classList.replace(token, `style-white`)
     }
   })
 

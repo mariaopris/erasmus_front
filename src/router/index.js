@@ -3,23 +3,66 @@ import Style from '@/views/StyleView.vue'
 import Home from '@/views/HomeView.vue'
 
 const routes = [
+  // {
+  //   meta: {
+  //     title: 'Select style'
+  //   },
+  //   path: '/',
+  //   name: 'style',
+  //   component: Style
+  // },
   {
-    meta: {
-      title: 'Select style'
-    },
-    path: '/',
-    name: 'style',
-    component: Style
-  },
-  {
-    // Document title tag
-    // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
       title: 'Dashboard'
     },
-    path: '/dashboard',
+    path: '/',
     name: 'dashboard',
     component: Home
+  },
+  {
+    path: '/universities',
+    name: 'universities',
+    component: () => import('../views/universities/UniversitiesView.vue')
+  },
+  {
+    path: '/add-university',
+    name: 'add-university',
+    component: () => import('../views/universities/AddUniversity.vue')
+  },
+  {
+    path: '/edit-university/:id',
+    name: 'edit-university',
+    component: () => import('../views/universities/EditUniversity.vue')
+  },
+  {
+    path: '/import-university',
+    name: 'import-university',
+    component: () => import('../views/universities/ImportUniversities.vue')
+  },
+  {
+    path: '/students',
+    name: 'students',
+    component: () => import('../views/StudentsView.vue')
+  },
+  {
+    path: '/tickets',
+    name: 'tickets',
+    component: () => import('../views/TicketsView.vue')
+  },
+  {
+    path: '/applications',
+    name: 'applications',
+    component: () => import('../views/ApplicationsView.vue')
+  },
+  {
+    path: '/view-application',
+    name: 'view-application',
+    component: () => import('../views/ViewApplication.vue')
+  },
+  {
+    path: '/view-ticket',
+    name: 'view-ticket',
+    component: () => import('../views/ViewTicket.vue')
   },
   {
     meta: {
@@ -52,14 +95,6 @@ const routes = [
     path: '/ui',
     name: 'ui',
     component: () => import('@/views/UiView.vue')
-  },
-  {
-    meta: {
-      title: 'Responsive layout'
-    },
-    path: '/responsive',
-    name: 'responsive',
-    component: () => import('@/views/ResponsiveView.vue')
   },
   {
     meta: {
