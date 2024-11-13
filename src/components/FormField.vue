@@ -13,6 +13,10 @@ defineProps({
   help: {
     type: String,
     default: null
+  },
+  required: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -36,7 +40,9 @@ const wrapperClass = computed(() => {
 
 <template>
   <div class="mb-6 last:mb-0">
-    <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{ label }}</label>
+    <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{ label }}
+      <span v-if="required" class="text-red-500">*</span>
+    </label>
     <div :class="wrapperClass">
       <slot />
     </div>

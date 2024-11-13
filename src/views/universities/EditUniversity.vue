@@ -112,10 +112,10 @@ import FormControl from '@/components/FormControl.vue';
 import BaseDivider from '@/components/BaseDivider.vue';
 import {mdiSchoolOutline, mdiMail, mdiAccountSchool, mdiHomeCity} from '@mdi/js';
 import Multiselect from 'vue-multiselect';
-import {Universty} from "../../types/Universty";
+import {Universty} from "../../types/universities/Universty";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {IscedCode} from "../../types/IscedCode";
+import {IscedCode} from "../../types/universities/IscedCode";
 import {useRoute} from "vue-router";
 
 const route = useRoute()

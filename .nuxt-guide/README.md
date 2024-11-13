@@ -90,7 +90,7 @@ module.exports = {
 
 useHead({
   titleTemplate: (titleChunk) => {
-    const titleBase = 'Erasmus One'
+    const titleBase = 'Erasmus One Admin'
 
     return titleChunk ? `${titleChunk} - ${titleBase}` : titleBase
   }

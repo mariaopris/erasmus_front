@@ -34,7 +34,7 @@ mainStore.fetchSampleHistory()
 // }
 
 // Default title tag
-const defaultDocumentTitle = 'Erasmus One'
+const defaultDocumentTitle = 'Erasmus One Admin'
 
 // Set document title from route meta
 router.afterEach((to) => {

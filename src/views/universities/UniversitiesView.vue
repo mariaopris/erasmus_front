@@ -18,7 +18,6 @@
       </template>
       <template v-else>
         <div>
-
           <div class="justify-end flex py-2">
             <FormControl v-model="searchValue" @input="search()" type="text" :icon="mdiTableSearch" class="w-[400px]" placeholder="Search ... " borderless/>
           </div>
@@ -100,7 +99,7 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import CardBox from '@/components/CardBox.vue'
 import axios from "axios";
 import Swal from 'sweetalert2'
-import {Universty} from "../../types/Universty";
+import {Universty} from "../../types/universities/Universty";
 import FormControl from '@/components/FormControl.vue'
 
 const perPage = ref(10);

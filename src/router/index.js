@@ -47,22 +47,22 @@ const routes = [
   {
     path: '/tickets',
     name: 'tickets',
-    component: () => import('../views/TicketsView.vue')
+    component: () => import('../views/tickets/TicketsView.vue')
   },
   {
     path: '/applications',
     name: 'applications',
-    component: () => import('../views/ApplicationsView.vue')
+    component: () => import('../views/applications/ApplicationsView.vue')
   },
   {
-    path: '/view-application',
+    path: '/view-application/:id',
     name: 'view-application',
-    component: () => import('../views/ViewApplication.vue')
+    component: () => import('../views/applications/ViewApplication.vue')
   },
   {
-    path: '/view-ticket',
+    path: '/view-ticket/:id',
     name: 'view-ticket',
-    component: () => import('../views/ViewTicket.vue')
+    component: () => import('../views/tickets/ViewTicket.vue')
   },
   {
     meta: {
