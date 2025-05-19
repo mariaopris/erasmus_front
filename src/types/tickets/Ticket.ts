@@ -1,5 +1,5 @@
 import {Message} from "./Message";
-import {User} from "../User";
+import {User} from "../user/User";
 
 export class Ticket {
   public id: number;
