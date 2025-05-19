@@ -7,6 +7,12 @@ import BaseIcon from '@/components/BaseIcon.vue'
 import UserAvatarCurrentUser from '@/components/UserAvatarCurrentUser.vue'
 import NavBarMenuList from '@/components/NavBarMenuList.vue'
 import BaseDivider from '@/components/BaseDivider.vue'
+import {useAuthStore} from "@/stores/auth";
+import {AuthUser} from "@/types/AuthUser";
+import Swal from "sweetalert2";
+import axios from "axios";
+import {useCookies} from "vue3-cookies";
+import router from "@/router";
 
 const props = defineProps({
   item: {
@@ -45,11 +51,20 @@ const componentClass = computed(() => {
 })
 
 const itemLabel = computed(() =>
-  props.item.isCurrentUser ? useMainStore().userName : props.item.label
+  props.item.isCurrentUser ? (auth_user.value.name + ' ' + auth_user.value.family_name) : props.item.label
 )
 
 const isDropdownActive = ref(false)
+const root = ref(null)
+const auth = useAuthStore();
+const auth_user = ref(new AuthUser());
+const {cookies} = useCookies();
 
+const forceClose = (event) => {
+  if (root.value && !root.value.contains(event.target)) {
+    isDropdownActive.value = false
+  }
+}
 const menuClick = (event) => {
   emit('menu-click', event, props.item)
 
@@ -60,19 +75,49 @@ const menuClick = (event) => {
 
 const menuClickDropdown = (event, item) => {
   emit('menu-click', event, item)
-}
-
-const root = ref(null)
-
-const forceClose = (event) => {
-  if (root.value && !root.value.contains(event.target)) {
-    isDropdownActive.value = false
+  if(item.isLogout) {
+    logout();
   }
 }
+
+const logout = async () => {
+  try {
+    await axios.post("http://127.0.0.1:8000/api/logout")
+      .then(async (response) => {
+        delete axios.defaults.headers.common.Authorization;
+        cookies.remove('Token', response.data.token);
+        auth_user.value = new AuthUser();
+
+        await router.push('/login');
+      });
+  }
+  catch (e) {
+    console.log(e);
+    if (e.response?.data?.error) {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Ooops..',
+        text: e.response.data.error,
+      })
+    } else {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Ooops..',
+        text: "An unknown error has occured",
+      })
+    }
+  }
+}
+
 
 onMounted(() => {
   if (props.item.menu) {
     window.addEventListener('click', forceClose)
+  }
+
+  if(auth.user !== null)
+  {
+    auth_user.value = new AuthUser(JSON.parse(auth.user));
   }
 })
 
@@ -103,7 +148,6 @@ onBeforeUnmount(() => {
           item.menu
       }"
     >
-      <UserAvatarCurrentUser v-if="item.isCurrentUser" class="w-6 h-6 mr-3 inline-flex" />
       <BaseIcon v-if="item.icon" :path="item.icon" class="transition-colors" />
       <span
         class="px-2 transition-colors"

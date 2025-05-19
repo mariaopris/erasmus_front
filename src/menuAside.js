@@ -1,20 +1,26 @@
 import {
   mdiAccountCircle,
   mdiMonitor,
-  mdiGithub,
   mdiLock,
   mdiAlertCircle,
   mdiSquareEditOutline,
   mdiTable,
   mdiViewList,
   mdiTelevisionGuide,
-  mdiResponsive,
-  mdiSchool, mdiAccountSchool, mdiTicket, mdiFileDocument
+  mdiCalendarQuestion,
+  mdiSchool,
+  mdiAccountSchool,
+  mdiTicket,
+  mdiFileDocument,
+  mdiBook,
+  mdiChairSchool,
+  mdiFileDocumentAlert,
+  mdiNotificationClearAll
 } from '@mdi/js'
 
 export default [
   {
-    to: '/',
+    to: '/dashboard',
     icon: mdiMonitor,
     label: 'Dashboard'
   },
@@ -34,67 +40,33 @@ export default [
     label: 'Applications'
   },
   {
+    to: '/documents',
+    icon: mdiFileDocumentAlert,
+    label: 'Documents'
+  },
+  {
+    to: '/courses',
+    icon: mdiBook,
+    label: 'Courses'
+  },
+  {
+    to: '/degrees',
+    icon: mdiChairSchool,
+    label: 'Degrees'
+  },
+  {
     to: '/tickets',
     icon: mdiTicket,
     label: 'Tickets'
   },
   {
-    to: '/tables',
-    label: 'Tables',
-    icon: mdiTable
+    to: '/notifications',
+    icon: mdiNotificationClearAll,
+    label: 'Notifications'
   },
   {
-    to: '/forms',
-    label: 'Forms',
-    icon: mdiSquareEditOutline
+    to: '/feedback',
+    label: 'Feedback',
+    icon: mdiCalendarQuestion
   },
-  {
-    to: '/ui',
-    label: 'UI',
-    icon: mdiTelevisionGuide
-  },
-  // {
-  //   to: '/',
-  //   label: 'Styles',
-  //   icon: mdiPalette
-  // },
-  {
-    to: '/profile',
-    label: 'Profile',
-    icon: mdiAccountCircle
-  },
-  {
-    to: '/login',
-    label: 'Login',
-    icon: mdiLock
-  },
-  {
-    to: '/error',
-    label: 'Error',
-    icon: mdiAlertCircle
-  },
-  {
-    label: 'Dropdown',
-    icon: mdiViewList,
-    menu: [
-      {
-        label: 'Item One'
-      },
-      {
-        label: 'Item Two'
-      }
-    ]
-  },
-  // {
-  //   href: 'https://github.com/justboil/admin-one-vue-tailwind',
-  //   label: 'GitHub',
-  //   icon: mdiGithub,
-  //   target: '_blank'
-  // },
-  // {
-  //   href: 'https://github.com/justboil/admin-one-react-tailwind',
-  //   label: 'React version',
-  //   icon: mdiReact,
-  //   target: '_blank'
-  // }
 ]

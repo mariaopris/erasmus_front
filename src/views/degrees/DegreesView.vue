@@ -2,7 +2,10 @@
   <LayoutAuthenticated>
     <SectionMain>
       <div class="flex justify-between items-center">
-        <SectionTitleLineWithButton :icon="mdiFileDocument" title="Student Applications"/>
+        <SectionTitleLineWithButton :icon="mdiChairSchool" title="Degrees"/>
+        <RouterLink to="/add-degree">
+          <BaseButton type="button" color="info" label="+Add Degree"/>
+        </RouterLink>
       </div>
 
       <template v-if="is_loading">
@@ -17,45 +20,28 @@
             <table>
               <thead>
               <tr>
-                <th>Student Name</th>
-                <th>Mobility</th>
-                <th>Status</th>
-                <th>Submitted At</th>
+                <th>Name</th>
+                <th>University Name</th>
                 <th />
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(application, application_index) in itemsPaginated">
-                <td data-label="Student Name">
-                  {{ application.first_name }} {{application.last_name}}
+              <tr v-for="(degree, degree_index) in itemsPaginated" :key="degree.id">
+                <td data-label="Name">
+                  {{ degree.name }}
                 </td>
-                <td data-label="Mobility">
-                  <p v-if="application.mobility_program === 'long'">Long-term</p>
-                  <p v-else-if="application.mobility_program === 'short'">Short-term</p>
-                  <p v-else-if="application.mobility_program === 'placement'">Placement</p>
-                  {{application.academic_year}}
+                <td data-label="University Name">
+                  {{ degree.university.name }}
                 </td>
-                <td data-label="Status">
-                  <p v-if="application.status === 'Waiting for approval'" class="font-semibold text-yellow-500">{{application.status}}</p>
-                  <p v-else-if="application.status === 'Issues'" class="font-semibold text-red-500">{{application.status}}</p>
-                  <p v-else-if="application.status === 'Accepted'" class="font-semibold text-green-500">{{application.status}}</p>
-                  <p v-else class="font-semibold">{{application.status}}</p>
-                </td>
-                <td data-label="Submitted At">
-                  {{application.created_at}}
-                </td>
-
                 <td class="before:hidden lg:w-1 whitespace-nowrap">
                   <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                    <BaseButton color="success" small :to="'/view-application/'+application.id" label="Review"/>
                     <BaseButton
                       color="danger"
                       :icon="mdiTrashCan"
                       small
-                      @click="deleteApplication(application.id, application_index)"
+                      @click="deleteDegree(degree.id, degree_index)"
                     />
                   </BaseButtons>
-
                 </td>
               </tr>
               </tbody>
@@ -86,7 +72,7 @@
 <script setup lang="ts">
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
-import {mdiFileDocument, mdiTableSearch, mdiTrashCan} from '@mdi/js'
+import {mdiTrashCan, mdiChairSchool,mdiTableSearch} from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import {computed, onMounted, ref} from "vue";
@@ -94,17 +80,24 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import CardBox from '@/components/CardBox.vue'
 import axios from "axios";
-import Swal from "sweetalert2";
-import {Application} from "../../types/applications/Application";
+import Swal from 'sweetalert2'
 import FormControl from '@/components/FormControl.vue'
+import {Degree} from "../../types/universities/Degree";
 
 const perPage = ref(10);
 const currentPage = ref(0);
 const itemsPaginated = computed(() =>
-  filtered_applications.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
+  filtered_degrees.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
 );
-const numPages = computed(() => Math.ceil(filtered_applications.value.length / perPage.value))
+const is_loading = ref(true);
+const degrees = ref<Degree[]>([]);
+const filtered_degrees = ref<Degree[]>([]);
+const searchValue = ref('');
+
+const numPages = computed(() => Math.ceil(filtered_degrees.value.length / perPage.value))
+
 const currentPageHuman = computed(() => currentPage.value + 1)
+
 const pagesList = computed(() => {
   const pagesList = []
 
@@ -114,30 +107,21 @@ const pagesList = computed(() => {
 
   return pagesList
 })
-const is_loading = ref(true);
-const applications = ref<Application[]>([]);
-const filtered_applications = ref<Application[]>([]);
-const searchValue = ref('');
 
 const search = () => {
   setTimeout(() => {
-    filtered_applications.value = applications.value.filter((application: Application) => {
+    filtered_degrees.value = degrees.value.filter((degree) => {
       return (
-        application.first_name.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.last_name.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.created_at.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.faculty.name.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.status.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.mobility_program.toLowerCase().includes(searchValue.value.toLowerCase()) ||
-        application.academic_year.toLowerCase().includes(searchValue.value.toLowerCase())
+        degree.name.toLowerCase().includes(searchValue.value.toLowerCase()) ||
+        degree.university.name.toLowerCase().includes(searchValue.value.toLowerCase())
       );
     });
   }, 1000);
 }
 
-const deleteApplication = (id: number, index: number) => {
+const deleteDegree = (id: number, index: number) => {
   Swal.fire({
-    title: 'Are you sure that you want to delete this application?',
+    title: 'Are you sure that you want to delete this degree?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -145,15 +129,15 @@ const deleteApplication = (id: number, index: number) => {
     confirmButtonText: 'Yes'
   }).then((result) => {
     if (result.isConfirmed) {
-      axios.delete(`http://127.0.0.1:8000/api/applications/${id}`)
+      axios.delete(`http://127.0.0.1:8000/api/degrees/${id}`)
         .then((response) => {
           Swal.fire({
             title: 'Success',
             icon: 'success',
-            html: 'Application deleted successfully!',
+            html: 'Degree deleted successfully!',
             showCancelButton: false,
           })
-          filtered_applications.value.splice(index,1);
+          degrees.value.splice(index,1);
         })
         .catch((error) => {
           console.log('eroare: ', error);
@@ -162,13 +146,14 @@ const deleteApplication = (id: number, index: number) => {
   })
 }
 
-const getData = async () => {
+const getDegrees = async () => {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/applications`);
-    response.data.applications.forEach((application: any) => {
-      applications.value.push(new Application(application));
+    const response = await axios.get("http://127.0.0.1:8000/api/degrees");
+    console.log('response.data.degrees',response.data.degrees)
+    response.data.degrees.forEach((degree: any) => {
+      degrees.value.push(new Degree(degree));
     })
-    filtered_applications.value = JSON.parse(JSON.stringify(applications.value));
+    filtered_degrees.value = JSON.parse(JSON.stringify(degrees.value));
   } catch (error) {
     console.log('error', error)
     Swal.fire({
@@ -181,6 +166,6 @@ const getData = async () => {
 }
 
 onMounted(() => {
-  getData();
+  getDegrees();
 })
 </script>

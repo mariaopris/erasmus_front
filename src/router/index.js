@@ -1,21 +1,12 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import Style from '@/views/StyleView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/HomeView.vue'
 
 const routes = [
-  // {
-  //   meta: {
-  //     title: 'Select style'
-  //   },
-  //   path: '/',
-  //   name: 'style',
-  //   component: Style
-  // },
   {
     meta: {
       title: 'Dashboard'
     },
-    path: '/',
+    path: '/dashboard',
     name: 'dashboard',
     component: Home
   },
@@ -63,6 +54,56 @@ const routes = [
     path: '/view-ticket/:id',
     name: 'view-ticket',
     component: () => import('../views/tickets/ViewTicket.vue')
+  },
+  {
+    path: '/courses',
+    name: 'courses',
+    component: () => import('../views/courses/CoursesView.vue')
+  },
+  {
+    path: '/add-course',
+    name: 'add-course',
+    component: () => import('../views/courses/AddCourse.vue')
+  },
+  {
+    path: '/edit-course/:id',
+    name: 'edit-course',
+    component: () => import('../views/courses/EditCourse.vue')
+  },
+  {
+    path: '/add-degree',
+    name: 'add-degree',
+    component: () => import('../views/degrees/AddDegree.vue')
+  },
+  {
+    path: '/degrees',
+    name: 'degrees',
+    component: () => import('../views/degrees/DegreesView.vue')
+  },
+  {
+    path: '/documents',
+    name: 'documents',
+    component: () => import('../views/documents/DocumentsView.vue')
+  },
+  {
+    path: '/view-document/:id',
+    name: 'view-document',
+    component: () => import('../views/documents/ReviewDocument.vue')
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: () => import('../views/notifications/NotificationsView.vue')
+  },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: () => import('../views/Feedbacks.vue')
+  },
+  {
+    path: '/add-notification',
+    name: 'add-notification',
+    component: () => import('../views/notifications/AddNotification.vue')
   },
   {
     meta: {
@@ -115,7 +156,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 }

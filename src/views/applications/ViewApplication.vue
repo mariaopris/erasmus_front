@@ -57,29 +57,65 @@
             </FormField>
           </div>
 
-          <FormField label="Phone (including country prefix)" required>
-            <FormControl :disabled="true" v-model="application.phone" class="w-1/2"/>
-          </FormField>
-
-          <BaseDivider />
-
           <div class="grid grid-cols-2 space-x-3">
+            <FormField label="Phone (including country prefix)" required>
+              <FormControl :disabled="true" v-model="application.phone"/>
+            </FormField>
             <FormField label="Identity Number" required>
               <FormControl :disabled="true" v-model="application.id_number"/>
             </FormField>
+          </div>
 
-            <FormField label="Faculty" required>
-              <Multiselect :disabled="true" v-model="application.faculty" :options="facultyOptions" :multiple="false" label="name" track-by="id"></Multiselect>
+          <BaseDivider />
+
+          <div class="mt-5">
+            <FormField label="Study cycle" required>
+              <div class="space-y-3">
+                <div class="flex space-x-14">
+                  <div class="flex space-x-3 items-center">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ba1" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Bachelor Year 1 🏫</span>
+                  </div>
+                  <div class="flex space-x-3 items-center">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ba2" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Bachelor Year 2 🎓</span>
+                  </div>
+                  <div class="flex space-x-3 items-center">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ba3" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Bachelor Year 3 📖</span>
+                  </div>
+                  <div class="flex space-x-3 items-center">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ba4" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Bachelor Year 4 🏆</span>
+                  </div>
+                </div>
+                <div class="flex space-x-14">
+                  <div class="flex space-x-3 items-center mr-1.5">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ma1" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Masters Year 1 🎓</span>
+                  </div>
+                  <div class="flex space-x-3 items-center">
+                    <input :disabled="true" v-model="application.current_study_year" value="Ma2" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">Masters Year 2 📘</span>
+                  </div>
+                </div>
+                <div class="flex space-x-14">
+                  <div class="flex space-x-3 items-center mr-1.5">
+                    <input :disabled="true" v-model="application.current_study_year" value="PhD" type="radio" class="opacity-50 cursor-not-allowed"/>
+                    <span class="radio">PhD 🧠</span>
+                  </div>
+                </div>
+              </div>
             </FormField>
           </div>
 
-          <div class="grid grid-cols-2 space-x-3">
-            <FormField label="Study cycle" required>
-              <FormControl :disabled="true" v-model="application.study_cycle" :options="studyCycleOptions"/>
+          <div class="grid grid-cols-2 space-x-3 mt-5">
+            <FormField label="Home university" required>
+              <Multiselect :disabled="true" v-model="home_university" :options="universities" :multiple="false" label="name" track-by="name"></Multiselect>
             </FormField>
 
-            <FormField label="Current year of study" required>
-              <FormControl :disabled="true" v-model="application.current_study_year" :options="studyYearOptions"/>
+            <FormField label="Degree" required>
+              <Multiselect :disabled="true" v-model="degree" :options="filteredDegrees()" :multiple="false" label="name" track-by="id"></Multiselect>
             </FormField>
           </div>
 
@@ -191,37 +227,37 @@
 
           <FormField label="Language Certificate" required>
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/language_certificate.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
 
           <FormField label="ID" required>
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/id.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
 
           <FormField label="CV" required>
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/cv.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
 
           <FormField label="Motivation Letter" required>
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/motivation_letter.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
 
           <FormField label="Transcript of records" required>
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/transcript_of_records.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
 
           <FormField label="Diplomas/Awards">
             <a :href="'http://127.0.0.1:8000/storage/applications/'+application.user_id+'/'+application.id+'/other_diplomas.pdf'" target="_blank" rel="noopener noreferrer">
-              <BaseButton color="info" :icon="mdiFileDownload" small/>
+              <BaseButton color="info" :icon="mdiFileDownload" small label="Download"/>
             </a>
           </FormField>
         </CardBox>
@@ -251,6 +287,8 @@ import {Application} from "../../types/applications/Application";
 import NotificationBar from '@/components/NotificationBar.vue'
 import {mdiAlert} from '@mdi/js';
 import {useRoute, useRouter} from "vue-router";
+import {Degree} from "../../types/universities/Degree";
+import {Step} from "../../types/home/Step";
 
 const isced_codes = ref<IscedCode[]>([]);
 const universities = ref<Universty[]>([]);
@@ -259,53 +297,30 @@ const application = ref(new Application());
 const countries = ref([]);
 const router = useRouter();
 const route = useRoute();
-
-const facultyOptions = [
-  { id: 0, name: 'Aerospace Engineering'},
-  { id: 1, name: 'Applied Sciences' },
-  { id: 2, name: 'Automatic Control and Computers' },
-  { id: 3, name: 'Biotechnical Systems Engineering ' },
-  { id: 4, name: 'Chemical Engineering and Biotechnologies' },
-  { id: 5, name: 'Electrical Engineering' },
-  { id: 6, name: 'Electronics, Telecommunications and Information Technology' },
-  { id: 7, name: 'Energy Engineering' },
-  { id: 8, name: 'Engineering in Foreign Languages' },
-  { id: 9, name: 'Entrepreneurship, Business Engineering and Management' },
-  { id: 10, name: 'Faculty of Economic Sciences and Law' },
-  { id: 11, name: 'Faculty of Educational Sciences, Social Sciences and Psychology' },
-  { id: 12, name: 'Faculty of Electronics, Communications and Computers' },
-  { id: 13, name: 'Faculty of Mechanics and Technology' },
-  { id: 14, name: 'Faculty of Sciences, Physical Education and Informatics' },
-  { id: 15, name: 'Faculty of Theology, Letters, History and Arts' },
-  { id: 16, name: 'Industrial Engineering and Robotics' },
-  { id: 17, name: 'IOSUD/CSUD - PhD Studies' },
-  { id: 18, name: 'Materials Science and Engineering' },
-  { id: 19, name: 'Mechanical Engineering and Mechatronics' }
-];
+const home_university = ref(new Universty());
 const academicYearOptions = ['2024/2025','2025/2026'];
-const studyCycleOptions = [
-  'Bachelor or equivalent first cycle (EQF level 6)',
-  'Doctorate or equivalent third cycle (EQF level 8)',
-  'Master or equivalent second cycle (EQF level 7)',
-  'Short cycle (EQF level 5)',
-];
 const statusOptions = [
   'Waiting for approval',
   'Issues',
   'Accepted'
 ];
-const studyYearOptions = [
-  '1st Year',
-  '2nd Year',
-  '3th Year',
-  '4th Year',
-  '5th Year',
-  '6th Year'
-];
 const destination_1 = ref(new Universty());
 const destination_2 = ref(new Universty());
 const destination_3 = ref(new Universty());
 const selected_university = ref(new Universty());
+const degrees = ref<Degree[]>([]);
+const degree = ref(new Degree());
+
+function filteredDegrees() {
+  let filtered_degrees = <Degree[]>[];
+  degrees.value.forEach((deg: Degree) => {
+    if(deg.university_id == home_university.value.id && application.value.current_study_year.includes(deg.level)) {
+      filtered_degrees.push(deg);
+    }
+  })
+
+  return filtered_degrees;
+}
 
 const submit = async () => {
   application.value.university_id = selected_university.value.id;
@@ -326,12 +341,13 @@ const submit = async () => {
           })
         }
         else {
-          Swal.fire({
-            title: 'Success!',
-            text: 'Feedback added successfully!',
-            icon: 'success',
-          })
-          await router.push('/applications')
+          if(application.value.status === 'Accepted') {
+            await changeStepStatus('1_2','done');
+            await changeStepStatus('1_3','in_progress');
+          }
+          else {
+            await changeStepStatus('1_2', 'incomplete');
+          }
         }
       });
   } catch (e) {
@@ -343,6 +359,54 @@ const submit = async () => {
         text: e.response.data.error,
       })
     }
+  }
+}
+
+const changeStepStatus = async (tag, status: string) => {
+  try {
+    let step = new Step();
+    step.tag = tag;
+    step.status = status;
+    await axios.put(`http://127.0.0.1:8000/api/steps/`+application.value.user_id, step)
+      .then(async (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Feedback added successfully!',
+          icon: 'success',
+        })
+        await router.push('/applications')
+      });
+  } catch (e) {
+    console.log(e);
+    if (e.response?.data?.error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ooops..',
+        text: e.response.data.error,
+      })
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Ooops..',
+        text: "An unknown error has occurred",
+      })
+    }
+  }
+}
+
+const getDegrees = async () => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/api/degrees");
+    response.data.degrees.forEach((degree: any) => {
+      degrees.value.push(new Degree(degree));
+    })
+  } catch (error) {
+    console.log('error', error)
+    Swal.fire({
+      title: 'Error!',
+      text: error.response.data.message,
+      icon: 'error',
+    })
   }
 }
 
@@ -429,6 +493,15 @@ const getApplication = async () => {
         selected_university.value = universities.value[index4];
       }
     }
+    let university_index = universities.value.findIndex(item => item.id == application.value.home_university);
+    if(university_index >= 0) {
+      home_university.value = universities.value[university_index];
+    }
+
+    let degree_index = degrees.value.findIndex(item => item.id == application.value.faculty);
+    if(degree_index >= 0) {
+      degree.value = degrees.value[degree_index];
+    }
   } catch (error) {
     console.log('error', error)
     Swal.fire({
@@ -442,6 +515,7 @@ const getApplication = async () => {
 }
 
 onMounted(async () => {
+  await getDegrees();
   await getCountries();
   await getIscedCodes();
   await getApplication();

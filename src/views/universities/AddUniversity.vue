@@ -30,9 +30,14 @@
           </FormField>
         </div>
 
-        <FormField label="ISCED Codes">
-          <Multiselect v-model="university.isced_codes" :options="isced_codes" :multiple="true" label="name" track-by="name"></Multiselect>
-        </FormField>
+        <div class="grid grid-cols-2 space-x-3">
+          <FormField label="ISCED Codes">
+            <Multiselect v-model="university.isced_codes" :options="isced_codes" :multiple="true" label="name" track-by="name"></Multiselect>
+          </FormField>
+          <FormField label="Number of Required ECTS Credits">
+            <FormControl v-model="university.no_required_credits" type="number"/>
+          </FormField>
+        </div>
 
         <FormField label="Study Plans">
           <div class="space-y-3">

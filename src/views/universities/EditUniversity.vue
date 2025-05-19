@@ -34,17 +34,22 @@
               </FormField>
             </div>
 
-            <FormField label="ISCED Codes">
-              <Multiselect v-model="university.isced_codes" :options="isced_codes" :multiple="true" label="name" track-by="name"></Multiselect>
-            </FormField>
+            <div class="grid grid-cols-2 space-x-3">
+              <FormField label="ISCED Codes">
+                <Multiselect v-model="university.isced_codes" :options="isced_codes" :multiple="true" label="name" track-by="name"></Multiselect>
+              </FormField>
+              <FormField label="Number of Required ECTS Credits">
+                <FormControl v-model="university.no_required_credits" type="number"/>
+              </FormField>
+            </div>
 
             <FormField label="Study Plans">
               <div class="space-y-3">
                 <div class="flex space-x-14">
-                  <div class="flex space-x-3 items-center">
-                    <input v-model="university.years" value="BA1" type="checkbox"/>
-                    <span class="check">Bachelor Year 1</span>
-                  </div>
+                    <div class="flex space-x-3 items-center">
+                      <input v-model="university.years" value="BA1" type="checkbox"/>
+                      <span class="check">Bachelor Year 1</span>
+                    </div>
                   <div class="flex space-x-3 items-center">
                     <input v-model="university.years" value="BA2" type="checkbox"/>
                     <span class="check">Bachelor Year 2</span>
@@ -87,10 +92,25 @@
               <FormControl v-model="university.description" type="textarea" placeholder="University Description" />
             </FormField>
 
+            <BaseDivider />
+            <p class="font-semibold text-lg mb-5">Departments</p>
+
+            <template v-for="(department, department_index) in departments">
+              <div class="flex space-x-3 p-2">
+                <p>{{department.name}}</p>
+                <button @click="deleteDepartment(department.id, department_index)" class="underline text-red-500">Delete</button>
+              </div>
+            </template>
+
+            <div class="flex space-x-3">
+              <FormControl type="text" v-model="new_department.name" placeholder="Department Name" class="w-1/2"/>
+              <BaseButton @click="addDepartment()" type="button" color="info" outline label="+Add"/>
+            </div>
+
             <template #footer>
               <BaseButtons>
                 <BaseButton to="/universities" type="button" color="info" outline label="Back"/>
-                <BaseButton @click="university.update()" color="info" label="Submit" />
+                <BaseButton @click="save()" color="info" label="Submit" />
               </BaseButtons>
             </template>
           </CardBox>
@@ -117,8 +137,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import {IscedCode} from "../../types/universities/IscedCode";
 import {useRoute} from "vue-router";
+import {Department} from "../../types/universities/Department";
 
-const route = useRoute()
+const route = useRoute();
 const university = ref<Universty>(new Universty());
 const isced_codes = ref<IscedCode[]>([]);
 const is_loading = ref(true);
@@ -133,6 +154,71 @@ const languages = [
   {id: 'TR', name: 'Turkish'},
   {id: 'PL', name: 'Polish'},
 ];
+const departments = ref<Department[]>([]);
+const new_department = ref(new Department());
+
+const save = () => {
+  departments.value.forEach((department: Department) => {
+    try {
+      axios.post(`http://127.0.0.1:8000/api/departments`, {
+        form : {
+          university_id: university.value.id,
+          name: department.name
+        }
+      })
+        .then(async (response) => {
+        });
+    } catch (e) {
+      console.log(e);
+      if (e.response?.data?.error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Ooops..',
+          text: e.response.data.error,
+        })
+      }
+    }
+  })
+  university.value.update();
+}
+
+const addDepartment = () => {
+  departments.value.push(new_department.value);
+  new_department.value = new Department();
+}
+
+const deleteDepartment = (id: number, index: number) => {
+  if(id !== 0) {
+    Swal.fire({
+      title: 'Are you sure that you want to delete this department?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://127.0.0.1:8000/api/departments/${id}`)
+          .then((response) => {
+            Swal.fire({
+              title: 'Success',
+              icon: 'success',
+              html: 'Department deleted successfully!',
+              showCancelButton: false,
+            })
+            departments.value.splice(index,1);
+          })
+          .catch((error) => {
+            console.log('eroare: ', error);
+          })
+      }
+    })
+  }
+  else {
+    departments.value.splice(index, 1);
+  }
+
+}
 
 const getUniversity = async () => {
   university.value.id = Number(route.params.id);
@@ -149,6 +235,9 @@ const getUniversity = async () => {
     })
     university.value = new Universty(response.data.university);
     university.value.isced_codes = codes;
+    response.data.university.departments.forEach((department: Department) => {
+      departments.value.push(new Department(department));
+    })
   } catch (error) {
     console.log('error', error)
     Swal.fire({

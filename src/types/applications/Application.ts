@@ -1,5 +1,3 @@
-import {User} from "../User";
-
 export class Application {
   public id: number;
   public user_id: number;
@@ -16,7 +14,6 @@ export class Application {
   public phone: string;
   public id_number: string;
   public faculty: string;
-  public study_cycle: string;
   public current_study_year: string;
   public education_field: string;
   public gpa: number;
@@ -26,12 +23,13 @@ export class Application {
   public mobility_start_date: string;
   public mobility_end_date: string;
   public destination_type: string;
+  public home_university: string;
   public destination_1: string;
   public destination_2: string;
   public destination_3: string;
   public placement_country: string;
   public created_at: Date | string;
-  public user: User | undefined;
+  public university_name: string;
 
   constructor(data: Application | void) {
     if (data === undefined)
@@ -51,7 +49,6 @@ export class Application {
       this.phone = '';
       this.id_number = '';
       this.faculty = '';
-      this.study_cycle = '';
       this.current_study_year = '';
       this.education_field = '';
       this.gpa = 0;
@@ -61,12 +58,13 @@ export class Application {
       this.mobility_start_date = '';
       this.mobility_end_date = '';
       this.destination_type = '';
+      this.home_university = '';
       this.destination_1 = '';
       this.destination_2 = '';
       this.destination_3 = '';
       this.placement_country = '';
       this.created_at = '';
-      this.user = new User();
+      this.university_name = '';
     }
     else {
       this.id = data.id;
@@ -84,7 +82,6 @@ export class Application {
       this.phone = data.phone;
       this.id_number = data.id_number;
       this.faculty = JSON.parse(data.faculty);
-      this.study_cycle = data.study_cycle;
       this.current_study_year = data.current_study_year;
       this.education_field = JSON.parse(data.education_field);
       this.gpa = data.gpa;
@@ -94,6 +91,7 @@ export class Application {
       this.mobility_start_date = data.mobility_start_date;
       this.mobility_end_date = data.mobility_end_date;
       this.destination_type = data.destination_type;
+      this.home_university = data.home_university;
       this.destination_1 = data.destination_1;
       this.destination_2 = data.destination_2;
       this.destination_3 = data.destination_3;
@@ -107,8 +105,7 @@ export class Application {
         minute: '2-digit',
         hour12: false,
       });
-      this.user = new User(data.user);
+      this.university_name = data.university_name;
     }
   }
-
 }

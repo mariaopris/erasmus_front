@@ -1,8 +1,8 @@
 import {IscedCode} from "./IscedCode";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {useRouter} from "vue-router";
-const router = useRouter()
+import {Department} from "./Department";
+import {Degree} from "./Degree";
 
 export class Universty {
   public id: number;
@@ -16,6 +16,9 @@ export class Universty {
   public years: string[] | string;
   public languages: [] | string;
   public description: string;
+  public departments: Department[];
+  public degrees: Degree[];
+  public no_required_credits: number;
 
   constructor(data: Universty | void) {
     if (data === undefined) {
@@ -30,6 +33,9 @@ export class Universty {
       this.years = <string[]>[];
       this.languages = [];
       this.description = '';
+      this.departments = <Department[]>[];
+      this.degrees = <Degree[]>[];
+      this.no_required_credits = 0;
     }
     else {
       this.id = data.id;
@@ -47,6 +53,19 @@ export class Universty {
         this.languages = JSON.parse(data.languages);
       }
       this.description = data.description;
+      this.departments = <Department[]>[];
+      if(data.hasOwnProperty('departments')) {
+        data.departments.forEach((department: Department) => {
+          this.departments.push(new Department(department));
+        })
+      }
+      this.degrees = <Degree[]>[];
+      if(data.hasOwnProperty('degrees')) {
+        data.degrees.forEach((degree: Degree) => {
+          this.degrees.push(new Degree(degree));
+        })
+      }
+      this.no_required_credits = data.no_required_credits;
     }
   }
 
@@ -67,7 +86,8 @@ export class Universty {
           'isced_codes': JSON.stringify(isced_codes),
           'years': JSON.stringify(this.years),
           'languages': JSON.stringify(this.languages),
-          'description': this.description
+          'description': this.description,
+          'no_required_credits': this.no_required_credits
         },
       })
         .then(async (response) => {
